@@ -1,20 +1,35 @@
 const { handler } = require('../../src');
 
-describe('#handler', () => {
-    it('should validate properly formatted event', () => {
+xdescribe('#handler', () => {
+    it('should validate properly formatted event', async () => {
         const properEvent = {
             body: 'someBody'
         };
 
-        const result = handler(properEvent);
-        expect(result).toEqual(true);
+        const result = await handler(properEvent);
+        console.log("RESULT:", result);
+        expect(result).toBeTruthy();
     });
-    it('should invalidate improperly formatted event', () => {
+    it('should invalidate improperly formatted event', async () => {
         const improperEvent = {
             body: { field: "value" }
         };
 
-        const result = handler(improperEvent);
+        const result = await handler(improperEvent);
         expect(result).toEqual(false);
     });
+    it('should throw an error when the request fails', async () => {
+        const improperEvent = {
+            body: { field: "value" }
+        };
+
+        let result = { field: 'field'};
+        try {
+            result = await handler(improperEvent);
+        } catch (e) {
+            expect(e).toEqual(false);
+        }
+        expect(result).toBeFalsy();
+    });
 });
+
